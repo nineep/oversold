@@ -122,20 +122,21 @@ func overcpu(cpu, multiple string) string {
 	if multiple == "" {
 		multiple = "1"
 	}
-	b, _ := strconv.Atoi(multiple)
+	//b, _ := strconv.Atoi(multiple)
+	b, _ := strconv.ParseFloat(multiple, 64)
 
 	// cpu的值可能是 32 或者 29800m
 	if strings.HasSuffix(cpu, "m") {
-		a, err := strconv.Atoi(strings.Trim(cpu, "m"))
+		a, err := strconv.ParseFloat(strings.Trim(cpu, "m"), 64)
 		if err != nil {
 			klog.Error("--------内存超售计算失败----------")
 			klog.Error(err)
 			return "1"
 		}
-		return strconv.Itoa(a*b) + "m"
+		return strconv.Itoa(int(a*b)) + "m"
 	} else {
-		a, _ := strconv.Atoi(cpu)
-		return strconv.Itoa(a * b)
+		a, _ := strconv.ParseFloat(cpu, 64)
+		return strconv.Itoa(int(a * b))
 	}
 }
 
@@ -144,106 +145,66 @@ func overmem(mem, multiple string) string {
 	if multiple == "" {
 		multiple = "1"
 	}
-	b, _ := strconv.Atoi(multiple)
+	b, _ := strconv.ParseFloat(multiple, 64)
 
 	// 内存单位可能为：空，Ki，Mi，Gi，Ti，Pi，Ei
 	if strings.HasSuffix(mem, "Ki") {
-		a, err := strconv.Atoi(strings.Trim(mem, "Ki"))
+		a, err := strconv.ParseFloat(strings.Trim(mem, "Ki"), 64)
 		if err != nil {
 			klog.Error("--------内存超售计算失败----------")
 			klog.Error(err)
 			return "1"
 		}
-		return strconv.Itoa(a*b) + "Ki"
+		return strconv.Itoa(int(a*b)) + "Ki"
 	} else if strings.HasSuffix(mem, "Mi") {
-		a, err := strconv.Atoi(strings.Trim(mem, "Mi"))
+		a, err := strconv.ParseFloat(strings.Trim(mem, "Mi"), 64)
 		if err != nil {
 			klog.Error("--------内存超售计算失败----------")
 			klog.Error(err)
 			return "1"
 		}
-		return strconv.Itoa(a*b) + "Mi"
+		return strconv.Itoa(int(a*b)) + "Mi"
 	} else if strings.HasSuffix(mem, "Gi") {
-		a, err := strconv.Atoi(strings.Trim(mem, "Mi"))
+		a, err := strconv.ParseFloat(strings.Trim(mem, "Gi"), 64)
 		if err != nil {
 			klog.Error("--------内存超售计算失败----------")
 			klog.Error(err)
 			return "1"
 		}
-		return strconv.Itoa(a*b) + "Mi"
-	} else if strings.HasSuffix(mem, "Gi") {
-		a, err := strconv.Atoi(strings.Trim(mem, "Mi"))
-		if err != nil {
-			klog.Error("--------内存超售计算失败----------")
-			klog.Error(err)
-			return "1"
-		}
-		return strconv.Itoa(a*b) + "Mi"
-	} else if strings.HasSuffix(mem, "Gi") {
-		a, err := strconv.Atoi(strings.Trim(mem, "Gi"))
-		if err != nil {
-			klog.Error("--------内存超售计算失败----------")
-			klog.Error(err)
-			return "1"
-		}
-		return strconv.Itoa(a*b) + "Gi"
+		return strconv.Itoa(int(a*b)) + "Gi"
 	} else if strings.HasSuffix(mem, "Ti") {
-		a, err := strconv.Atoi(strings.Trim(mem, "Mi"))
+		a, err := strconv.ParseFloat(strings.Trim(mem, "Ti"), 64)
 		if err != nil {
 			klog.Error("--------内存超售计算失败----------")
 			klog.Error(err)
 			return "1"
 		}
-		return strconv.Itoa(a*b) + "Mi"
-	} else if strings.HasSuffix(mem, "Gi") {
-		a, err := strconv.Atoi(strings.Trim(mem, "Ti"))
-		if err != nil {
-			klog.Error("--------内存超售计算失败----------")
-			klog.Error(err)
-			return "1"
-		}
-		return strconv.Itoa(a*b) + "Ti"
+		return strconv.Itoa(int(a*b)) + "Ti"
 	} else if strings.HasSuffix(mem, "Pi") {
-		a, err := strconv.Atoi(strings.Trim(mem, "Mi"))
+		a, err := strconv.ParseFloat(strings.Trim(mem, "Pi"), 64)
 		if err != nil {
 			klog.Error("--------内存超售计算失败----------")
 			klog.Error(err)
 			return "1"
 		}
-		return strconv.Itoa(a*b) + "Mi"
-	} else if strings.HasSuffix(mem, "Gi") {
-		a, err := strconv.Atoi(strings.Trim(mem, "Pi"))
-		if err != nil {
-			klog.Error("--------内存超售计算失败----------")
-			klog.Error(err)
-			return "1"
-		}
-		return strconv.Itoa(a*b) + "Pi"
+		return strconv.Itoa(int(a*b)) + "Pi"
 	} else if strings.HasSuffix(mem, "Ei") {
-		a, err := strconv.Atoi(strings.Trim(mem, "Mi"))
+		a, err := strconv.ParseFloat(strings.Trim(mem, "Ei"), 64)
 		if err != nil {
 			klog.Error("--------内存超售计算失败----------")
 			klog.Error(err)
 			return "1"
 		}
-		return strconv.Itoa(a*b) + "Mi"
-	} else if strings.HasSuffix(mem, "Gi") {
-		a, err := strconv.Atoi(strings.Trim(mem, "Ei"))
-		if err != nil {
-			klog.Error("--------内存超售计算失败----------")
-			klog.Error(err)
-			return "1"
-		}
-		return strconv.Itoa(a*b) + "Ei"
+		return strconv.Itoa(int(a*b)) + "Ei"
 	} else {
 		// 单位为空时，单位默认为Bytes
-		a, err := strconv.Atoi(mem)
+		a, err := strconv.ParseFloat(mem, 64)
 		if err != nil {
 			klog.Error("--------内存超售计算失败----------")
 			klog.Error(err)
 			return "1"
 		}
-		return strconv.Itoa(a * b)
+		return strconv.Itoa(int(a * b))
 	}
 }
 
