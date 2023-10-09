@@ -50,8 +50,8 @@ func oversold(request *admissionv1.AdmissionRequest) (*admissionv1.AdmissionResp
 			}, nil
 		}
 
-		klog.Info(request.UserInfo.Username + "的label为kubernetes.io/oversold:" + node.Labels["kubernetes.io/oversold"])
-		klog.Info(request.UserInfo.Username + "===================该节点允许超售========================")
+		klog.Info(request.UserInfo.Username + " 的label为kubernetes.io/oversold:" + node.Labels["kubernetes.io/oversold"])
+		klog.Info(request.UserInfo.Username + " ===================该节点允许超售========================")
 		patches := []Patch{
 			{
 				Option: PatchOptionReplace,
@@ -66,8 +66,15 @@ func oversold(request *admissionv1.AdmissionRequest) (*admissionv1.AdmissionResp
 				Value: overmem(Quantitytostring(node.Status.Allocatable.Memory()), node.Labels["kubernetes.io/overmem"]),
 			},
 		}
-		klog.Info(overcpu(Quantitytostring(node.Status.Allocatable.Cpu()), node.Labels["kubernetes.io/overcpu"]))
-		klog.Info(overmem(Quantitytostring(node.Status.Allocatable.Memory()), node.Labels["kubernetes.io/overmem"]))
+		// 实际可分配资源
+		klog.Info(request.UserInfo.Username + "oldCPU: " + Quantitytostring(node.Status.Allocatable.Cpu()))
+		klog.Info(request.UserInfo.Username + "oldMem: " + Quantitytostring(node.Status.Allocatable.Memory()))
+		// 超卖系数
+		klog.Info(request.UserInfo.Username + "CPUFactor: " + node.Labels["kubernetes.io/overcpu"])
+		klog.Info(request.UserInfo.Username + "MemFactor: " + node.Labels["kubernetes.io/overmem"])
+		// 超卖后可分配资源
+		klog.Info(request.UserInfo.Username + "overSoldCPU: " + overcpu(Quantitytostring(node.Status.Allocatable.Cpu()), node.Labels["kubernetes.io/overcpu"]))
+		klog.Info(request.UserInfo.Username + "overSoldMem: " + overmem(Quantitytostring(node.Status.Allocatable.Memory()), node.Labels["kubernetes.io/overmem"]))
 		patch, err := jsoniter.Marshal(patches)
 		if err != nil {
 			errMsg := fmt.Sprintf("[route.Mutating] /oversold: failed to marshal patch: %v", err)
@@ -105,12 +112,12 @@ func oversold(request *admissionv1.AdmissionRequest) (*admissionv1.AdmissionResp
 
 }
 
-//*resource.Quantity类型转string
+// *resource.Quantity类型转string
 func Quantitytostring(r *resource.Quantity) string {
 	return fmt.Sprint(r)
 }
 
-//cpu 超售计算
+// cpu 超售计算
 func overcpu(cpu, multiple string) string {
 	a, _ := strconv.Atoi(cpu)
 	if multiple == "" {
