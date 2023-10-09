@@ -23,7 +23,7 @@
 
 ```bash
 cd oversold
-docker build -t goadmission:v1.0 . #构建镜像
+docker build -t goadmission:v1.0.4 . #构建镜像
 kubectl create ns oversold  #创建命名空间
 
 cd oversold/deploy/cfssl

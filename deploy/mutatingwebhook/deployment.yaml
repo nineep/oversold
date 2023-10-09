@@ -18,7 +18,7 @@ spec:
       serviceAccountName: mutating-webhook
       containers:
         - name: goadmission
-          image: nineep/goadmission:v1.0
+          image: nineep/goadmission:v1.0.4
           imagePullPolicy: Always
           args:
             - --cert=/etc/kubernetes/ssl/dac.pem
