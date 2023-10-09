@@ -38,7 +38,7 @@ kubectl apply -f .
 ### 四、如何开启
 
  ```shell
- kubectl label --overwrite node --all m  #若只需要部分节点进行超售。只需要对需要超售节点进行打标
+ kubectl label --overwrite node --all kubernetes.io/oversold=oversold  #若只需要部分节点进行超售。只需要对需要超售节点进行打标
  kubectl label --overwrite node --all kubernetes.io/overcpu=3  ### 超卖倍数
  kubectl label --overwrite node --all kubernetes.io/overmem=3  #### 超卖倍数 可只超卖cpu 或meme
 

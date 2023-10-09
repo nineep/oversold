@@ -67,14 +67,14 @@ func oversold(request *admissionv1.AdmissionRequest) (*admissionv1.AdmissionResp
 			},
 		}
 		// 实际可分配资源
-		klog.Info(request.UserInfo.Username + "oldCPU: " + Quantitytostring(node.Status.Allocatable.Cpu()))
-		klog.Info(request.UserInfo.Username + "oldMem: " + Quantitytostring(node.Status.Allocatable.Memory()))
+		klog.Info(request.UserInfo.Username + " oldCPU: " + Quantitytostring(node.Status.Allocatable.Cpu()))
+		klog.Info(request.UserInfo.Username + " oldMem: " + Quantitytostring(node.Status.Allocatable.Memory()))
 		// 超卖系数
-		klog.Info(request.UserInfo.Username + "CPUFactor: " + node.Labels["kubernetes.io/overcpu"])
-		klog.Info(request.UserInfo.Username + "MemFactor: " + node.Labels["kubernetes.io/overmem"])
+		klog.Info(request.UserInfo.Username + " CPUFactor: " + node.Labels["kubernetes.io/overcpu"])
+		klog.Info(request.UserInfo.Username + " MemFactor: " + node.Labels["kubernetes.io/overmem"])
 		// 超卖后可分配资源
-		klog.Info(request.UserInfo.Username + "overSoldCPU: " + overcpu(Quantitytostring(node.Status.Allocatable.Cpu()), node.Labels["kubernetes.io/overcpu"]))
-		klog.Info(request.UserInfo.Username + "overSoldMem: " + overmem(Quantitytostring(node.Status.Allocatable.Memory()), node.Labels["kubernetes.io/overmem"]))
+		klog.Info(request.UserInfo.Username + " overSoldCPU: " + overcpu(Quantitytostring(node.Status.Allocatable.Cpu()), node.Labels["kubernetes.io/overcpu"]))
+		klog.Info(request.UserInfo.Username + " overSoldMem: " + overmem(Quantitytostring(node.Status.Allocatable.Memory()), node.Labels["kubernetes.io/overmem"]))
 		patch, err := jsoniter.Marshal(patches)
 		if err != nil {
 			errMsg := fmt.Sprintf("[route.Mutating] /oversold: failed to marshal patch: %v", err)
