@@ -8,6 +8,8 @@ WORKDIR ${SRC_PATH}
 
 COPY . .
 
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
+
 RUN set -ex \
     && apk add git \
     && export BUILD_VERSION=$(cat version) \
@@ -26,6 +28,8 @@ ENV TZ ${TZ}
 ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 ENV LANGUAGE en_US:en
+
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
 
 RUN set -ex \
     && apk add bash tzdata ca-certificates \

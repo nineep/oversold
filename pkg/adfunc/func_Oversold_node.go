@@ -119,28 +119,132 @@ func Quantitytostring(r *resource.Quantity) string {
 
 // cpu 超售计算
 func overcpu(cpu, multiple string) string {
-	a, _ := strconv.Atoi(cpu)
 	if multiple == "" {
 		multiple = "1"
 	}
 	b, _ := strconv.Atoi(multiple)
-	return strconv.Itoa(a * b)
+
+	// cpu的值可能是 32 或者 29800m
+	if strings.HasSuffix(cpu, "m") {
+		a, err := strconv.Atoi(strings.Trim(cpu, "m"))
+		if err != nil {
+			klog.Error("--------内存超售计算失败----------")
+			klog.Error(err)
+			return "1"
+		}
+		return strconv.Itoa(a*b) + "m"
+	} else {
+		a, _ := strconv.Atoi(cpu)
+		return strconv.Itoa(a * b)
+	}
 }
 
 // mem 超售计算
 func overmem(mem, multiple string) string {
-	a, err := strconv.Atoi(strings.Trim(mem, "Ki"))
-	if err != nil {
-		klog.Error("--------内存超售计算失败----------")
-		klog.Error(err)
-		return "1"
-	}
 	if multiple == "" {
 		multiple = "1"
 	}
 	b, _ := strconv.Atoi(multiple)
-	c := a * b
-	return strconv.Itoa(c) + "Ki"
+
+	// 内存单位可能为：空，Ki，Mi，Gi，Ti，Pi，Ei
+	if strings.HasSuffix(mem, "Ki") {
+		a, err := strconv.Atoi(strings.Trim(mem, "Ki"))
+		if err != nil {
+			klog.Error("--------内存超售计算失败----------")
+			klog.Error(err)
+			return "1"
+		}
+		return strconv.Itoa(a*b) + "Ki"
+	} else if strings.HasSuffix(mem, "Mi") {
+		a, err := strconv.Atoi(strings.Trim(mem, "Mi"))
+		if err != nil {
+			klog.Error("--------内存超售计算失败----------")
+			klog.Error(err)
+			return "1"
+		}
+		return strconv.Itoa(a*b) + "Mi"
+	} else if strings.HasSuffix(mem, "Gi") {
+		a, err := strconv.Atoi(strings.Trim(mem, "Mi"))
+		if err != nil {
+			klog.Error("--------内存超售计算失败----------")
+			klog.Error(err)
+			return "1"
+		}
+		return strconv.Itoa(a*b) + "Mi"
+	} else if strings.HasSuffix(mem, "Gi") {
+		a, err := strconv.Atoi(strings.Trim(mem, "Mi"))
+		if err != nil {
+			klog.Error("--------内存超售计算失败----------")
+			klog.Error(err)
+			return "1"
+		}
+		return strconv.Itoa(a*b) + "Mi"
+	} else if strings.HasSuffix(mem, "Gi") {
+		a, err := strconv.Atoi(strings.Trim(mem, "Gi"))
+		if err != nil {
+			klog.Error("--------内存超售计算失败----------")
+			klog.Error(err)
+			return "1"
+		}
+		return strconv.Itoa(a*b) + "Gi"
+	} else if strings.HasSuffix(mem, "Ti") {
+		a, err := strconv.Atoi(strings.Trim(mem, "Mi"))
+		if err != nil {
+			klog.Error("--------内存超售计算失败----------")
+			klog.Error(err)
+			return "1"
+		}
+		return strconv.Itoa(a*b) + "Mi"
+	} else if strings.HasSuffix(mem, "Gi") {
+		a, err := strconv.Atoi(strings.Trim(mem, "Ti"))
+		if err != nil {
+			klog.Error("--------内存超售计算失败----------")
+			klog.Error(err)
+			return "1"
+		}
+		return strconv.Itoa(a*b) + "Ti"
+	} else if strings.HasSuffix(mem, "Pi") {
+		a, err := strconv.Atoi(strings.Trim(mem, "Mi"))
+		if err != nil {
+			klog.Error("--------内存超售计算失败----------")
+			klog.Error(err)
+			return "1"
+		}
+		return strconv.Itoa(a*b) + "Mi"
+	} else if strings.HasSuffix(mem, "Gi") {
+		a, err := strconv.Atoi(strings.Trim(mem, "Pi"))
+		if err != nil {
+			klog.Error("--------内存超售计算失败----------")
+			klog.Error(err)
+			return "1"
+		}
+		return strconv.Itoa(a*b) + "Pi"
+	} else if strings.HasSuffix(mem, "Ei") {
+		a, err := strconv.Atoi(strings.Trim(mem, "Mi"))
+		if err != nil {
+			klog.Error("--------内存超售计算失败----------")
+			klog.Error(err)
+			return "1"
+		}
+		return strconv.Itoa(a*b) + "Mi"
+	} else if strings.HasSuffix(mem, "Gi") {
+		a, err := strconv.Atoi(strings.Trim(mem, "Ei"))
+		if err != nil {
+			klog.Error("--------内存超售计算失败----------")
+			klog.Error(err)
+			return "1"
+		}
+		return strconv.Itoa(a*b) + "Ei"
+	} else {
+		// 单位为空时，单位默认为Bytes
+		a, err := strconv.Atoi(mem)
+		if err != nil {
+			klog.Error("--------内存超售计算失败----------")
+			klog.Error(err)
+			return "1"
+		}
+		return strconv.Itoa(a * b)
+	}
 }
 
 ////实际使用率计算

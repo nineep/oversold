@@ -23,12 +23,14 @@
 
 ```bash
 cd oversold
-docker build -t goadmission:v0.9 . #构建镜像
+docker build -t goadmission:v1.0 . #构建镜像
 kubectl create ns oversold  #创建命名空间
 
 cd oversold/deploy/cfssl
-sh cfssl-install.sh
+sh cfssl-install.sh #安装cfssl  
 sh create.sh #生成密钥
+
+# 部署服务
 cd ../mutatingwebhook/
 kubectl apply -f .
 ```
